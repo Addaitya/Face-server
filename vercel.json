@@ -1,18 +1,23 @@
 {
+    "version": 2,
     "builds": [
-        {
-            "src": "server/main.py",
-            "use": "@vercel/python"
-        },
-        {
-            "src": "static/**",
-            "use": "@vercel/static"
-        }
+      {
+        "src": "./server/main.py",
+        "use": "@vercel/python"
+      },
+      {
+        "src": "./server/utils/*.py",
+        "use": "@vercel/python"
+      },
+      {
+        "src": "./*.keras",
+        "use": "@vercel/python"
+      },
     ],
     "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "server/main.py"
-        }
+      {
+        "src": "/(.*)",
+        "dest": "./server/main.py"
+      }
     ]
-}
+  }
