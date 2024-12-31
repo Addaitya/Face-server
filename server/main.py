@@ -1,12 +1,12 @@
 import os
 from dotenv import load_dotenv
 from flask import (
-    Blueprint, flash, g, redirect, request, url_for, jsonify
+    Blueprint, Flask , g, redirect, request, url_for, jsonify
 )
 import numpy as np
 import cv2
-from .utils.encoder import Encoder
-from .utils.db import PersonCollection
+from utils.encoder import Encoder
+from utils.db import PersonCollection
 
 load_dotenv()
 
@@ -18,9 +18,10 @@ COSIN = os.getenv('COSIN_INDEX')
 SEARCH_FIELD = os.getenv('SEARCH_FIELD')
 
 
-bp = Blueprint('main', __name__)
+app = Flask(__name__)
+# app = Blueprint('main', __name__)
 
-@bp.before_request
+@app.before_request
 def auth():
     '''
     Check access token is valid or not 
@@ -46,7 +47,7 @@ def auth():
     
 
 
-@bp.post('/register_face')
+@app.post('/register_face')
 def register_face():
     '''
     Here request provide name, student_id and face image as input.
@@ -96,7 +97,7 @@ def register_face():
         return jsonify({"error": "Internal Server error"}), 500
     
 
-@bp.post('/check_face')
+@app.post('/check_face')
 def check_face():
     try:
         face_image = request.files['face_image'] if 'face_image' in request.files else None
@@ -146,3 +147,6 @@ def check_face():
     except Exception as e:
         print(f"Error in check_face: \n{e}")
         return jsonify({"error": "Internal Server error"}), 500
+
+if __name__ == "__main__":
+    app.run(debug=True)
